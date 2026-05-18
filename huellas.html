@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Huellas</title>
+  <style>
+    @font-face {
+      font-family: 'Franie';
+      src: local('Franie'), local('Franie-Regular');
+      font-weight: 100 800;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Franie';
+      src: url('Franie-Black.ttf') format('truetype');
+      font-weight: 900;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Roille';
+      src: url('Roille.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #1C1A18;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      color: rgba(247,247,244,0.85);
+      padding: clamp(32px, 6vw, 80px) clamp(20px, 6vw, 64px) 80px;
+      position: relative;
+    }
+
+    .site-header {
+      margin-bottom: clamp(56px, 10vw, 100px);
+    }
+
+    .site-header-box {
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(circle, #F7F7F4 2.5px, transparent 2.5px) 7px 7px / 8px 8px no-repeat,
+        radial-gradient(circle, #F7F7F4 2.5px, transparent 2.5px) calc(100% - 7px) 7px / 8px 8px no-repeat,
+        radial-gradient(circle, #F7F7F4 2.5px, transparent 2.5px) 7px calc(100% - 7px) / 8px 8px no-repeat,
+        radial-gradient(circle, #F7F7F4 2.5px, transparent 2.5px) calc(100% - 7px) calc(100% - 7px) / 8px 8px no-repeat,
+        #232220;
+      border: 1.5px solid #F7F7F4;
+    }
+
+    .site-header-main {
+      padding: clamp(24px, 3.5vw, 48px) clamp(20px, 3.5vw, 44px) clamp(20px, 3vw, 40px);
+      border-bottom: 1.5px solid #F7F7F4;
+      position: relative;
+    }
+
+    .site-header-text {
+      /* texto ocupa el ancho natural */
+    }
+
+    .site-header-faces {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: clamp(16px, 3vw, 44px);
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .face {
+      width: clamp(106px, 14.5vw, 198px);
+      height: auto;
+      display: block;
+      mix-blend-mode: screen;
+      opacity: 0.85;
+    }
+
+    .face-a {
+      position: relative;
+      z-index: 1;
+      margin-right: 10px;
+      animation: face-float 4.4s ease-in-out infinite;
+      animation-delay: 1.0s;
+    }
+
+    .face-c {
+      position: relative;
+      z-index: 2;
+      width: clamp(115px, 15.7vw, 209px);
+      animation: face-float 3.7s ease-in-out infinite;
+    }
+
+    @keyframes face-float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-26px); }
+    }
+
+    .site-header-sub {
+      padding: 18px clamp(20px, 3.5vw, 44px) 22px;
+    }
+
+    @media (max-width: 620px) {
+      .face { width: clamp(60px, 18vw, 100px); }
+      .face-a { margin-right: -16px; }
+    }
+
+    .site-eyebrow {
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(247,247,244,0.25);
+      margin-bottom: 28px;
+    }
+
+    .site-title {
+      font-family: 'Franie', sans-serif;
+      font-size: clamp(38px, 6.5vw, 82px);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      color: rgba(247,247,244,0.92);
+      margin-bottom: 0;
+    }
+
+    @keyframes word-float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-7px); }
+    }
+
+    .site-title em {
+      font-style: normal;
+      color: rgba(247,247,244,0.92);
+      display: inline-block;
+      animation: word-float 3.8s ease-in-out infinite;
+    }
+
+    .site-title em:last-of-type {
+      animation-delay: 1.9s;
+    }
+
+    .site-sub {
+      font-size: clamp(12px, 1.4vw, 15px);
+      font-weight: 300;
+      line-height: 1.80;
+      color: rgba(247,247,244,0.40);
+      max-width: 620px;
+    }
+
+    .site-sub strong {
+      font-weight: 400;
+      color: rgba(247,247,244,0.65);
+    }
+
+    .tw-cursor {
+      display: inline-block;
+      width: 1.5px;
+      height: 1em;
+      background: rgba(247,247,244,0.75);
+      vertical-align: text-bottom;
+      margin-left: 1px;
+      animation: tw-blink .55s step-end infinite;
+    }
+    @keyframes tw-blink { 50% { opacity: 0; } }
+
+    .glyphs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(32px, 6vw, 80px);
+      align-items: flex-start;
+    }
+
+    .glyph-wrap {
+      flex: 1 1 280px;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .glyph-wrap svg {
+      width: 100%;
+      height: auto;
+      cursor: crosshair;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .name {
+      margin-top: 18px;
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: rgba(247,247,244,0.32);
+    }
+
+    /* ── Legend ── */
+    .legend {
+      width: 100%;
+      margin-top: 20px;
+      border-top: 1px solid rgba(247,247,244,0.08);
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 12px;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(247,247,244,0.05);
+      align-items: baseline;
+    }
+
+    .legend-key {
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(247,247,244,0.24);
+    }
+
+    .legend-val {
+      font-size: 10.5px;
+      font-weight: 300;
+      color: rgba(247,247,244,0.65);
+      line-height: 1.6;
+    }
+
+    .swatch {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    .emo-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+    }
+
+    .emo-item {
+      display: flex;
+      align-items: center;
+      font-size: 10.5px;
+      color: rgba(247,247,244,0.65);
+    }
+
+    /* ══════════════════════════════════════════
+       ANALYSIS SECTION
+    ══════════════════════════════════════════ */
+    .analysis {
+      margin-top: 0;
+      padding-top: 56px;
+      border-top: 1px solid rgba(247,247,244,0.10);
+    }
+
+    .glyphs-section {
+      margin-top: 120px;
+      padding-top: 56px;
+      border-top: 1px solid rgba(247,247,244,0.10);
+    }
+
+    .analysis-header { margin-bottom: 32px; }
+
+    .analysis-h2 {
+      font-size: clamp(13px, 1.6vw, 16px);
+      font-weight: 400;
+      line-height: 1.55;
+      color: rgba(247,247,244,0.88);
+      margin-bottom: 12px;
+      max-width: 680px;
+    }
+
+    .analysis-sub {
+      font-size: 10px;
+      color: rgba(247,247,244,0.35);
+      line-height: 1.95;
+      max-width: 580px;
+      margin-bottom: 20px;
+    }
+
+    .global-legend {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 9px;
+      color: rgba(247,247,244,0.40);
+      letter-spacing: 0.08em;
+    }
+
+    .leg-solid { display:inline-block; width:20px; height:3px; background:rgba(247,247,244,0.55); flex-shrink:0; }
+    .leg-dotted {
+      display:inline-block; width:20px; height:10px;
+      border:1.5px solid rgba(247,247,244,0.40);
+      background-image: radial-gradient(circle,rgba(247,247,244,0.55) 1.1px,transparent 1.1px);
+      background-size:5px 5px;
+      flex-shrink:0;
+    }
+    .leg-sep { margin:0 12px; }
+
+    /* Blocks */
+    .an-block { margin-bottom: 72px; }
+
+    .block-title {
+      font-family: 'Franie', sans-serif;
+      font-size: clamp(9px, 1.2vw, 14px);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: rgba(247,247,244,0.78);
+      margin-bottom: 10px;
+    }
+
+    .block-insight {
+      font-family: 'Franie', sans-serif;
+      font-size: clamp(38px, 5vw, 50px);
+      font-weight: normal;
+      color: rgba(247,247,244,0.88);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin: 0 0 20px;
+    }
+
+    .block-intro {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(247,247,244,0.52);
+      line-height: 1.85;
+      max-width: 720px;
+      margin-bottom: 20px;
+    }
+
+    /* ── Card grid ── */
+    .sm-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+    }
+
+    /* ── Card shell: two sub-boxes stacked vertically ── */
+    .cc {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+      position: relative;
+      background:
+        radial-gradient(circle, #F7F7F4 2.5px, transparent 2.5px) 7px 7px / 8px 8px no-repeat,
+        radial-gradient(circle, #F7F7F4 2.5px, transparent 2.5px) calc(100% - 7px) 7px / 8px 8px no-repeat,
+        radial-gradient(circle, #F7F7F4 2.5px, transparent 2.5px) 7px calc(100% - 7px) / 8px 8px no-repeat,
+        radial-gradient(circle, #F7F7F4 2.5px, transparent 2.5px) calc(100% - 7px) calc(100% - 7px) / 8px 8px no-repeat,
+        #232220;
+      border: 1.5px solid #F7F7F4;
+      border-left: 1.5px solid #F7F7F4;
+    }
+
+    .cc.span2 { grid-column: span 2; }
+    .cc.span3 { grid-column: span 3; }
+    .cc.span4 { grid-column: span 4; }
+
+    /* Top sub-box: chart area */
+    .cc-chart {
+      flex: 1;
+      padding: 18px 16px 14px;
+      border-bottom: 1px solid rgba(247,247,244,0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    /* Bottom sub-box: toggle button */
+    .cc-info {
+      padding: 10px 14px 12px;
+      min-width: 0;
+      border-top: 1px solid rgba(247,247,244,0.08);
+      cursor: pointer;
+      user-select: none;
+      transition: background .18s;
+    }
+    .cc-info:hover { background: rgba(247,247,244,0.03); }
+
+    .cc-info-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .cc-toggle {
+      font-size: 16px;
+      line-height: 1;
+      color: rgba(247,247,244,0.20);
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: transform .22s ease, color .18s;
+    }
+    .cc.open .cc-toggle {
+      transform: rotate(45deg);
+      color: var(--cb, rgba(247,247,244,0.7));
+    }
+
+    .cc-name {
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(247,247,244,0.88);
+      line-height: 1.35;
+      margin-bottom: 4px;
+    }
+
+    .cc-vals {
+      font-size: 9px;
+      color: rgba(247,247,244,0.40);
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 4px;
+      line-height: 1.7;
+    }
+
+    .cc-desc {
+      font-size: 8px;
+      color: rgba(247,247,244,0.30);
+      line-height: 1.55;
+    }
+
+    /* Expand panel */
+    .cc-expand {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .32s ease;
+    }
+    .cc.open .cc-expand { max-height: 280px; }
+
+    .cc-expand-inner {
+      padding: 10px 14px 14px;
+      border-top: 1px solid rgba(247,247,244,0.06);
+      font-size: 9px;
+      color: rgba(247,247,244,0.44);
+      line-height: 1.75;
+    }
+
+    /* ── Bar chart (colored bars on dark track) ── */
+    .bch { width: 100%; }
+
+    .br {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .br:last-child { margin-bottom: 0; }
+
+    .ct  { font-size: 7px; color: rgba(247,247,244,0.22); width: 9px; flex-shrink:0; text-align:right; }
+    .btr { flex:1; height:10px; background:rgba(247,247,244,0.07); }
+    .bfc { height:100%; background: var(--cb); }
+    .bfa {
+      height:100%;
+      background-image: radial-gradient(circle, var(--cb) 1.2px, transparent 1.2px);
+      background-size: 5px 5px;
+    }
+    .bv  { font-size:9px; color:rgba(247,247,244,0.55); width:34px; flex-shrink:0;
+           font-variant-numeric:tabular-nums; }
+
+    /* ── Stacked bars ── */
+    .str { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
+    .str:last-of-type { margin-bottom:0; }
+    .strk { flex:1; display:flex; height:10px; }
+    .sg { height:100%; overflow:hidden; }
+
+    .stk-legend { display:flex; flex-wrap:wrap; gap:2px 8px; margin-top:8px; }
+    .stk-leg {
+      font-size:7px; color:rgba(247,247,244,0.35);
+      display:flex; align-items:center; gap:3px;
+    }
+    .stk-sw { width:7px; height:7px; flex-shrink:0; display:inline-block; }
+
+    /* ── SVG charts ── */
+    .ch-svg { width:100%; overflow:visible; display:block; }
+
+    /* ── Campos ── */
+    .campos-grid  { display:flex; gap:16px; }
+    .campos-col   { flex:1; min-width:0; }
+    .campos-name  {
+      font-size:8px; letter-spacing:.10em; text-transform:uppercase;
+      color:rgba(247,247,244,0.28); margin-bottom:8px;
+    }
+    .campo-item   { display:flex; align-items:center; gap:7px; margin-bottom:7px; }
+    .campo-bw     { width:44px; flex-shrink:0; height:7px; background:rgba(247,247,244,0.07); }
+    .campo-bc     { height:100%; background: var(--cb); }
+    .campo-ba     {
+      height:100%;
+      background-image: radial-gradient(circle, var(--cb) 1.1px, transparent 1.1px);
+      background-size: 5px 5px;
+    }
+    .campo-lbl { font-size:8.5px; color:rgba(247,247,244,0.65); flex:1; min-width:0; line-height:1.3; }
+    .campo-pct { font-size:8px; color:rgba(247,247,244,0.30); flex-shrink:0; }
+
+    /* ── Riqueza léxica — big number cards ── */
+    .lex-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+    }
+    .lex-card {
+      padding: 28px 20px 22px;
+      background:
+        radial-gradient(circle, #F7F7F4 2.5px, transparent 2.5px) 7px 7px / 8px 8px no-repeat,
+        radial-gradient(circle, #F7F7F4 2.5px, transparent 2.5px) calc(100% - 7px) 7px / 8px 8px no-repeat,
+        radial-gradient(circle, #F7F7F4 2.5px, transparent 2.5px) 7px calc(100% - 7px) / 8px 8px no-repeat,
+        radial-gradient(circle, #F7F7F4 2.5px, transparent 2.5px) calc(100% - 7px) calc(100% - 7px) / 8px 8px no-repeat,
+        #232220;
+      border: 1.5px solid #F7F7F4;
+      display: flex;
+      flex-direction: column;
+    }
+    .lex-nums {
+      display: flex;
+      gap: 20px;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+    .lex-num { display: flex; flex-direction: column; }
+    .lex-big {
+      font-size: clamp(38px, 4.5vw, 60px);
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+    .lex-who {
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(247,247,244,0.28);
+      margin-top: 6px;
+    }
+    .lex-label {
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(247,247,244,0.75);
+      margin-bottom: 7px;
+    }
+    .lex-detail {
+      font-size: 9px;
+      color: rgba(247,247,244,0.32);
+      line-height: 1.70;
+      flex: 1;
+    }
+    @media (max-width: 900px) {
+      .lex-cards { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .lex-cards { grid-template-columns: 1fr 1fr; gap: 4px; }
+      .lex-card  { padding: 16px 12px 14px; }
+      .lex-nums  { flex-direction: column; gap: 6px; margin-bottom: 12px; }
+      .lex-big   { font-size: clamp(32px, 10vw, 48px); }
+      .block-insight { font-size: clamp(22px, 6.5vw, 30px); }
+    }
+    @media (max-width: 380px) {
+      .lex-cards { grid-template-columns: 1fr; }
+      .lex-nums  { flex-direction: row; gap: 16px; }
+      .lex-big   { font-size: clamp(42px, 13vw, 58px); }
+    }
+
+    /* ── Footer ── */
+    .analysis-footer {
+      margin-top:72px; padding-top:24px; border-top:.5px solid rgba(247,247,244,0.08);
+      font-size:9.5px; color:rgba(247,247,244,0.28); line-height:2.1; max-width:720px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .footer-disclaimer { max-width: 640px; }
+    .footer-author {
+      display: flex; align-items: center; gap: 20px;
+      padding-top: 16px; border-top: .5px solid rgba(247,247,244,0.06);
+    }
+    .footer-name {
+      font-size: 11px; font-weight: 400; color: rgba(247,247,244,0.58);
+      letter-spacing: 0.04em;
+    }
+    .footer-links { display: flex; gap: 14px; }
+    .footer-link {
+      font-size: 9px; color: rgba(247,247,244,0.30);
+      text-decoration: none; letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .footer-link:hover { color: rgba(247,247,244,0.65); }
+    .ver-met { color:rgba(247,247,244,0.44); text-decoration:underline; text-underline-offset:2px; }
+
+    @media (max-width: 900px) { .sm-grid { grid-template-columns: repeat(3,1fr); } }
+    @media (max-width: 600px) {
+      .sm-grid { grid-template-columns: repeat(2,1fr); }
+      .cc.span2, .cc.span3, .cc.span4 { grid-column: span 2; }
+      .campos-grid { flex-direction: column; }
+    }
+    @media print {
+      .analysis { break-before:page; }
+      .an-block  { break-inside:avoid; }
+      body { padding:32px; background:#1C1A18; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-box">
+      <div class="site-header-main">
+        <div class="site-header-text">
+          <p class="site-eyebrow">Análisis de lenguaje · Colombia 2026</p>
+          <h1 class="site-title">
+            Así piensan <em>Abelardo</em><br>y <em>Cepeda</em>,<br>según su discurso.
+          </h1>
+        </div>
+        <div class="site-header-faces">
+          <img class="face face-a" src="abelardo.png" alt="Abelardo De Armas">
+          <img class="face face-c" src="cepeda.png" alt="Carlos Cepeda">
+        </div>
+      </div>
+      <div class="site-header-sub">
+        <p class="site-sub" id="site-sub-tw">
+          Analizamos sus discursos, cómo organizan sus ideas y qué palabras escogen,
+          para entender <strong>no lo que dicen, sino cómo lo piensan.</strong>
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════
+       ANALYSIS SECTION
+  ════════════════════════════════════════════ -->
+  <section class="analysis">
+
+    <header class="analysis-header">
+      <div class="global-legend">
+        <span class="leg-solid"></span>
+        <span>Cepeda</span>
+        <span class="leg-sep"></span>
+        <span class="leg-dotted"></span>
+        <span>Abelardo</span>
+      </div>
+    </header>
+
+    <div class="an-block">
+      <div class="block-title">Cómo piensan</div>
+      <p class="block-insight">Cepeda: complejo y extenso. Abelardo reduce a certezas puntuales.</p>
+      <p class="block-intro">Cepeda escribe oraciones casi el doble de largas que Abelardo (17 vs. 10 palabras de mediana), con más cláusulas subordinadas por oración (1.35 vs. 0.83) y casi tres veces más oraciones que superan las 30 palabras (22.6 % vs. 7.8 %). Usa también tres veces más modalizadores epistémicos —palabras que gradúan la certeza, como «probablemente» o «es posible»— (6.23 vs. 2.01 por mil). Curiosamente, la densidad de subordinadas por cada mil palabras es casi idéntica en los dos (~62 vs. ~60), lo que sugiere que Abelardo distribuye la misma complejidad relativa en oraciones mucho más cortas.</p>
+      <div class="sm-grid" id="grid-think"></div>
+    </div>
+
+    <div class="an-block">
+      <div class="block-title">Desde dónde hablan</div>
+      <p class="block-insight">Los dos hablan desde el yo. Cepeda convoca; Abelardo interpela.</p>
+      <p class="block-intro">El dato más sorprendente: los dos candidatos son igualmente yo-céntricos —Cepeda el 68.8 % del tiempo, Abelardo el 71.6 %—. La diferencia está en hacia dónde apunta cada uno. Cepeda usa siete veces más el «nosotros» que Abelardo (10.4 % vs. 1.4 %) para construir comunidad; Abelardo interpela más directamente al oyente con «ustedes» (17.7 % vs. 14.6 %). Los dos hablan en presente de forma casi idéntica (77.3 % vs. 78.5 %). Cepeda gradúa más su certeza —tres veces más modalizadores epistémicos— y tiene el doble de nominalizaciones, lo que da a su discurso mayor densidad conceptual.</p>
+      <div class="sm-grid" id="grid-speak"></div>
+    </div>
+
+    <div class="an-block">
+      <div class="block-title">Desde dónde sienten</div>
+      <p class="block-insight">Ambos hablan desde la esperanza. Cepeda lo dice con más carga emocional.</p>
+      <p class="block-intro">Contra lo esperado, los dos candidatos tienen valencia positiva —Abelardo incluso más que Cepeda (+0.42 vs. +0.24)—. Pero Cepeda expresa esa positividad con casi cuatro veces más intensidad emocional (3.8 vs. 1.08 palabras cargadas por cada cien). En ambos domina la anticipación —proyección hacia lo que viene—, más pronunciada en Abelardo (35.6 % vs. 27.9 %). El campo semántico de Abelardo es abrumadoramente el orgullo nacional (48.6 % de su carga afectiva); el de Cepeda es más diverso: esperanza y futuro (22.2 %), traición y enemigo (18.9 %) y orgullo (15.6 %). Abelardo tiene agencia mayoritariamente pasiva (51.6 %); Cepeda es ligeramente más activo (55.4 %).</p>
+      <div class="sm-grid" id="grid-feel"></div>
+    </div>
+
+    <div class="an-block">
+      <div class="block-title">Riqueza léxica</div>
+      <p class="block-insight">Cepeda explora y busca. Abelardo insiste y llega al punto.</p>
+      <p class="block-intro">Cepeda mantiene mayor diversidad léxica a lo largo del discurso (MTLD 67.5 vs. 52.2), lo que significa que tarda más en repetirse. La paradoja de Abelardo: usa más palabras que aparecen una sola vez —más hapax por cada cien (16.24 vs. 14.06)—, pero su vocabulario se agota antes. Introduce términos nuevos al inicio y luego concentra el texto en un conjunto reducido. Las tasas de repetición de las 20 palabras más frecuentes son prácticamente idénticas (0.059 vs. 0.057), lo que sugiere que ambos dependen de un núcleo de términos clave con la misma intensidad.</p>
+      <div id="grid-lex"></div>
+    </div>
+
+  </section>
+
+  <div class="glyphs-section">
+    <div class="block-title" style="margin-bottom:10px">Sus huellas</div>
+    <p class="block-intro" style="margin-bottom:32px">La síntesis visual de los dos discursos: forma, densidad, color y disposición de cada partícula traducen un dato real. Cepeda en píldoras de baja intensidad emocional y alta complejidad sintáctica; Abelardo en píldoras concentradas en el presente y el orgullo. Pasa el cursor —o el dedo— para activarlas.</p>
+    <div class="glyphs">
+      <div class="glyph-wrap" id="wrap-c">
+        <svg id="gc" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="name">Cepeda</div>
+        <div class="legend" id="legend-c"></div>
+      </div>
+      <div class="glyph-wrap" id="wrap-a">
+        <svg id="ga" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="name">Abelardo</div>
+        <div class="legend" id="legend-a"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="analysis-footer">
+    <p class="footer-disclaimer">
+      Metodología: El sistema procesa transcripciones en español mediante un pipeline determinístico en Python que produce 38 indicadores en cuatro dimensiones: sintáctico-argumentativa, enunciativa, afectiva y léxica. La sintaxis se mide por densidad de condicionales, contrafácticos, subordinadas, conectores lógicos y dispersión de longitud oracional. La enunciación se mide por nominalizaciones sufijales, modalizadores epistémicos, distribución pronominal segregada según taxonomía LIWC (tónicos, átonos, posesivos), y desambiguación morfológica de modo y tiempo verbal mediante diccionario manual de más de 200 formas conjugadas inequívocas más reglas morfológicas estrictas. La dimensión afectiva combina densidad léxica sobre las ocho categorías de Plutchik, ocho campos semánticos políticamente situados, valencia normalizada al rango −1 a +1, composición tetradimensional de dirección del afecto, y aproximación de agencia por contraste pasiva/activa. La dimensión léxica reporta MTLD (McCarthy y Jarvis 2010), hapax legomena, concentración del top 20 y longitud grafémica media. La comparación entre piezas se restringe a géneros discursivos equivalentes (entrevista con entrevista) para neutralizar el sesgo del género sobre indicadores pronominales y modales.
+    </p>
+    <div class="footer-author">
+      <span class="footer-name">Fabian H · 2026</span>
+      <div class="footer-links">
+        <a class="footer-link" href="https://www.linkedin.com/in/fabian-herrera-4253654a/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="footer-link" href="https://www.instagram.com/fabianh3d/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </footer>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const W = 480, H = 480, CX = 240, CY = 240, BR = 148;
+const f = x => (+x).toFixed(2);
+
+const EMO_COLOR = {
+  confianza:    '#4B9FE5',  // acero azul
+  anticipacion: '#D4823A',  // ámbar
+  tristeza:     '#5A6E98',  // azul pizarra
+  ira:          '#C85850',  // rojo apagado
+  miedo:        '#8A78BC',  // violeta suave
+  alegria:      '#4BAF68',  // verde muted
+  asco:         '#3AAFB8',  // teal
+  sorpresa:     '#C8A840',  // dorado
+};
+
+const DATA = {
+  c: {
+    iNorm: 3.8/20, sharp: false,
+    dir:  { pasado:43.8, futuro:34.9, adentro:19.8, afuera:1.6 },
+    words:17, subs:1.35, cond:3.4, ctrf:0.0,
+    pron: { yo:68.8, nosotros:10.4, ustedes:14.6, ellos:6.2 },
+    campos:[{p:22.2},{p:18.9},{p:15.6}],
+    emotions:{ anticipacion:27.9, confianza:21.4, asco:16.4, alegria:9.5,
+               miedo:9.0, tristeza:5.5, ira:5.5, sorpresa:5.0 }
+  },
+  a: {
+    iNorm: 1.08/20, sharp: false,
+    dir:  { pasado:25.7, futuro:30.6, adentro:38.9, afuera:4.9 },
+    words:10, subs:0.83, cond:4.56, ctrf:0.0,
+    pron: { yo:71.6, nosotros:1.4, ustedes:17.7, ellos:9.2 },
+    campos:[{p:48.6},{p:15.9},{p:12.1}],
+    emotions:{ anticipacion:35.6, confianza:18.6, alegria:16.9, asco:11.9,
+               miedo:8.5, ira:6.8, tristeza:1.7, sorpresa:0.0 }
+  }
+};
+
+function mk(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k,v] of Object.entries(attrs)) e.setAttribute(k,v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+// ── UNIT DRAWING ──────────────────────────────────────────────────────────────
+
+function drawPill(parent, cx, cy, sz, radialAngle, col, cellSz) {
+  const cs = cellSz || 12;
+  const g  = mk('g', {}, parent);
+  const w  = cs * sz * 0.80;
+  const h  = Math.max(1.5, cs * sz * 0.34);
+  const deg = ((radialAngle + Math.PI / 2) * 180 / Math.PI).toFixed(1);
+  mk('rect', {
+    x: f(cx - w/2), y: f(cy - h/2),
+    width: f(w), height: f(h),
+    rx: f(h/2), ry: f(h/2),
+    fill: col,
+    transform: `rotate(${deg} ${f(cx)} ${f(cy)})`
+  }, g);
+  return { el: g, cx, cy, vx:0, vy:0, ox:0, oy:0 };
+}
+
+function drawSpike(parent, cx, cy, sz, radialAngle, col, cellSz) {
+  const cs   = cellSz || 12;
+  const g    = mk('g', {}, parent);
+  const len  = cs * sz * 0.56;
+  const base = cs * sz * 0.18;
+  const tx = cx + Math.cos(radialAngle) * len * 0.65;
+  const ty = cy + Math.sin(radialAngle) * len * 0.65;
+  const bx = cx - Math.cos(radialAngle) * len * 0.35;
+  const by = cy - Math.sin(radialAngle) * len * 0.35;
+  const px = Math.cos(radialAngle + Math.PI/2) * base;
+  const py = Math.sin(radialAngle + Math.PI/2) * base;
+  mk('path', {
+    d: `M ${f(tx)} ${f(ty)} L ${f(bx+px)} ${f(by+py)} L ${f(bx-px)} ${f(by-py)} Z`,
+    fill: col
+  }, g);
+  return { el: g, cx, cy, vx:0, vy:0, ox:0, oy:0 };
+}
+
+// ── SIZE FIELD ────────────────────────────────────────────────────────────────
+function buildSizeField(c) {
+  const iNorm  = c.iNorm;
+  const sharp  = c.sharp;
+  const nPeaks = sharp ? Math.round(7 + iNorm * 14) : Math.round(4 + iNorm * 5);
+  const amp    = sharp ? 0 : 16 + iNorm * 28;
+  const peakR  = BR * (1 + iNorm * 0.44);
+  const valR   = BR * (1 - iNorm * 0.16);
+  const trans  = 16;
+
+  function silR(angle) {
+    const a = ((angle % (Math.PI*2)) + Math.PI*2) % (Math.PI*2);
+    if (sharp) {
+      const cycle = Math.PI * 2 / nPeaks;
+      const phase = (a % cycle) / cycle;
+      const blend = (Math.cos(phase * Math.PI * 2) + 1) / 2;
+      return valR + (peakR - valR) * blend;
+    } else {
+      return BR + amp * Math.sin(nPeaks * a);
+    }
+  }
+
+  return function(cx, cy) {
+    const dx = cx - CX, dy = cy - CY;
+    const dist  = Math.sqrt(dx*dx + dy*dy);
+    const angle = Math.atan2(dy, dx);
+    const inside = silR(angle) - dist;
+    if (inside < -trans) return 0;
+    if (inside < 0) return Math.max(0, (inside + trans) / trans) * 0.32;
+    return Math.min(1, 0.28 + inside / (silR(angle) || 1) * 0.72);
+  };
+}
+
+// ── COLOUR FIELD ──────────────────────────────────────────────────────────────
+function buildColorField(c, colors) {
+  const sorted  = Object.entries(c.emotions).sort((a,b) => b[1]-a[1]);
+  const stripeH = Math.max(2, Math.round(sorted[0][1] / 5));
+  const accentP = Math.max(4, Math.round(sorted[0][1] / Math.max(1, sorted[2][1]) * 2));
+  const [c1, c2, c3] = colors;
+  return function(col, row) {
+    if (col % accentP === 0) return c3 || c1;
+    return Math.floor(row / stripeH) % 2 === 0 ? c1 : c2;
+  };
+}
+
+// ── PHYSICS SYSTEM ────────────────────────────────────────────────────────────
+const registry = {};
+let rafId = null;
+
+function physTick() {
+  let anyActive = false;
+  for (const cells of Object.values(registry)) {
+    for (const c of cells) {
+      if (Math.abs(c.vx) < 0.02 && Math.abs(c.vy) < 0.02 &&
+          Math.abs(c.ox) < 0.02 && Math.abs(c.oy) < 0.02) continue;
+      anyActive = true;
+      c.vx += -c.ox * 0.28;
+      c.vy += -c.oy * 0.28;
+      c.vx *= 0.70;
+      c.vy *= 0.70;
+      c.ox += c.vx;
+      c.oy += c.vy;
+      if (Math.abs(c.ox) < 0.05 && Math.abs(c.oy) < 0.05) {
+        c.vx = c.vy = c.ox = c.oy = 0;
+        c.el.removeAttribute('transform');
+      } else {
+        c.el.setAttribute('transform', `translate(${c.ox.toFixed(2)},${c.oy.toFixed(2)})`);
+      }
+    }
+  }
+  if (anyActive) rafId = requestAnimationFrame(physTick);
+  else rafId = null;
+}
+
+function kickPhys() {
+  if (!rafId) rafId = requestAnimationFrame(physTick);
+}
+
+function addInteraction(svgEl, svgId, cells) {
+  registry[svgId] = cells;
+  const R = 70;
+
+  function applyForce(clientX, clientY) {
+    const rect = svgEl.getBoundingClientRect();
+    const mx = (clientX - rect.left) * (W / rect.width);
+    const my = (clientY - rect.top)  * (H / rect.height);
+    for (const c of cells) {
+      const dx = c.cx - mx, dy = c.cy - my;
+      const d2 = dx*dx + dy*dy;
+      if (d2 < R*R) {
+        const force = (1 - Math.sqrt(d2) / R) * 4.2;
+        c.vx += (Math.random() - 0.5) * force * 2.8;
+        c.vy += (Math.random() - 0.5) * force * 2.8;
+      }
+    }
+    kickPhys();
+  }
+
+  // Mouse
+  svgEl.addEventListener('mousemove', e => applyForce(e.clientX, e.clientY));
+  svgEl.addEventListener('mouseleave', kickPhys);
+
+  // Touch
+  svgEl.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const t = e.touches[0];
+    applyForce(t.clientX, t.clientY);
+  }, { passive: false });
+  svgEl.addEventListener('touchend', kickPhys);
+}
+
+// ── LEGEND BUILDER ────────────────────────────────────────────────────────────
+function buildLegend(key) {
+  const c    = DATA[key];
+  const CELL = Math.max(6, Math.round(22 - c.words * 0.52));
+  const varPct = Math.round(Math.min(1.5, c.subs / 2.0) * 100);
+  const nPeaks = c.sharp
+    ? Math.round(7 + c.iNorm * 14)
+    : Math.round(4 + c.iNorm * 5);
+  const formaDesc = c.sharp
+    ? `Picos · ${nPeaks} puntas`
+    : `Píldoras · ${nPeaks} lóbulos`;
+  const condDesc = c.cond < 7 ? 'cuadrícula' : c.cond < 11 ? 'semi-orgánica' : 'orgánica';
+  const domDir = Object.entries(c.dir).sort((a,b) => b[1]-a[1]).slice(0,2)
+    .map(([k,v]) => `${k} ${v}%`).join(' · ');
+
+  const sorted = Object.entries(c.emotions).sort((a,b) => b[1]-a[1]).slice(0,3);
+  const topColors = sorted.map(([em]) => EMO_COLOR[em]);
+
+  const rows = [
+    { key: 'Forma',       val: `iNorm ${(c.iNorm*20).toFixed(1)} → ${formaDesc}` },
+    { key: 'Densidad',    val: `${c.words} palabras/or. → celda ${CELL} px` },
+    { key: 'Variación',   val: `subs ${c.subs} → ±${varPct}% tamaño` },
+    { key: 'Disposición', val: `cond ${c.cond} → ${condDesc}` },
+    { key: 'Emociones',   emos: sorted.map(([em, pct], i) => ({ em, pct, col: topColors[i] })) },
+    { key: 'Núcleo',      val: domDir },
+  ];
+
+  const container = document.getElementById('legend-' + key);
+  rows.forEach(row => {
+    const div = document.createElement('div');
+    div.className = 'legend-row';
+
+    const kEl = document.createElement('span');
+    kEl.className = 'legend-key';
+    kEl.textContent = row.key;
+    div.appendChild(kEl);
+
+    if (row.emos) {
+      const list = document.createElement('div');
+      list.className = 'emo-list';
+      row.emos.forEach(({ em, pct, col }) => {
+        const item = document.createElement('div');
+        item.className = 'emo-item';
+        item.innerHTML = `<span class="swatch" style="background:${col}"></span>${em} ${pct}%`;
+        list.appendChild(item);
+      });
+      div.appendChild(list);
+    } else {
+      const vEl = document.createElement('span');
+      vEl.className = 'legend-val';
+      vEl.textContent = row.val;
+      div.appendChild(vEl);
+    }
+    container.appendChild(div);
+  });
+}
+
+// ── GLYPH BUILDER ─────────────────────────────────────────────────────────────
+function build(id, key) {
+  const c   = DATA[key];
+  const svg = document.getElementById(id);
+  const k   = key;
+
+  const CELL       = Math.max(6, Math.round(22 - c.words * 0.52));
+  const sizeVarAmp = Math.min(1.5, c.subs / 2.0);
+  const jitter     = Math.pow(c.cond / 20, 1.4) * CELL * 1.6;
+
+  const topColors = Object.entries(c.emotions)
+    .sort((a,b) => b[1]-a[1]).slice(0,3)
+    .map(([em]) => EMO_COLOR[em]);
+
+  const sizeAt  = buildSizeField(c);
+  const colorAt = buildColorField(c, topColors);
+
+  const d  = c.dir, dt = d.pasado+d.futuro+d.adentro+d.afuera;
+  const nx = CX + ((d.afuera-d.adentro)/dt) * 55;
+  const ny = CY + ((d.pasado-d.futuro)/dt) * 55;
+  const nr = 8 + c.iNorm * 6;
+
+  const BG = '#1C1A18';
+  mk('defs', {}, svg);
+  mk('rect', {width:W, height:H, fill:BG}, svg);
+
+  const cells = [];
+  const COLS = Math.ceil(W/CELL) + 2;
+  const ROWS = Math.ceil(H/CELL) + 2;
+
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+      const gridCx = col * CELL + CELL/2 - CELL;
+      const gridCy = row * CELL + CELL/2 - CELL;
+      const sz = sizeAt(gridCx, gridCy);
+      if (sz < 0.05) continue;
+
+      const cx = gridCx + (Math.random() - 0.5) * 2 * jitter;
+      const cy = gridCy + (Math.random() - 0.5) * 2 * jitter;
+
+      const variation = 1 + (Math.random() - 0.5) * 2 * sizeVarAmp;
+      const finalSz   = Math.max(0.06, Math.min(2.0, sz * variation));
+
+      const radialAngle = Math.atan2(cy - CY, cx - CX);
+      const color       = colorAt(col, row);
+
+      let cell;
+      if (c.sharp) cell = drawSpike(svg, cx, cy, finalSz, radialAngle, color, CELL);
+      else         cell = drawPill(svg,  cx, cy, finalSz, radialAngle, color, CELL);
+      cells.push(cell);
+    }
+  }
+
+  mk('circle', {cx:f(nx), cy:f(ny), r:f(nr*1.9), fill:BG}, svg);
+  mk('circle', {cx:f(nx), cy:f(ny), r:f(nr),     fill:topColors[0]}, svg);
+  mk('circle', {cx:f(nx), cy:f(ny), r:f(nr*0.38), fill:BG}, svg);
+
+  addInteraction(svg, id, cells);
+}
+
+build('gc', 'c');
+build('ga', 'a');
+buildLegend('c');
+buildLegend('a');
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+//  ANALYSIS CHARTS  —  colored border + bars, white card background
+// ══════════════════════════════════════════════════════════════════════════════
+
+const JD = {
+  c: {
+    piensa: { condicionales_por_1000:3.4, contrafactuales_por_1000:0.0,
+              subordinadas_por_1000:61.97, subordinadas_por_oracion:1.35,
+              mediana_palabras_oracion:17, porcentaje_oraciones_largas:22.6,
+              conectores_logicos_por_100:1.21 },
+    habla:  { nominalizaciones_por_100:3.97,
+              pronombres:{ yo:68.8, nosotros:10.4, ustedes:14.6, ellos:6.2 },
+              modo:{ indicativo:84.3, subjuntivo:7.9, condicional:6.7, imperativo:1.2 },
+              tiempo:{ pasado:12.0, presente:77.3, futuro:10.7 },
+              modalizadores_por_1000:6.23 },
+    siente: { valencia:0.24, intensidad_por_100:3.8,
+              plutchik:{ anticipacion:27.9, confianza:21.4, asco:16.4, alegria:9.5,
+                         miedo:9.0, tristeza:5.5, ira:5.5, sorpresa:5.0 },
+              direccion:{ pasado:43.8, futuro:34.9, adentro:19.8, afuera:1.6 },
+              agencia:{ activa:55.4, pasiva:44.6 },
+              campos:[ {campo:'esperanza_y_futuro',porcentaje:22.2},
+                       {campo:'traicion_y_enemigo',porcentaje:18.9},
+                       {campo:'orgullo_nacional',porcentaje:15.6} ] },
+    lex: { mtld:67.51, hapax_por_100:14.06, repeticion_top20:0.057, long_media:4.75 }
+  },
+  a: {
+    piensa: { condicionales_por_1000:4.56, contrafactuales_por_1000:0.0,
+              subordinadas_por_1000:60.39, subordinadas_por_oracion:0.83,
+              mediana_palabras_oracion:10, porcentaje_oraciones_largas:7.8,
+              conectores_logicos_por_100:0.91 },
+    habla:  { nominalizaciones_por_100:1.7,
+              pronombres:{ yo:71.6, nosotros:1.4, ustedes:17.7, ellos:9.2 },
+              modo:{ indicativo:88.8, subjuntivo:6.6, condicional:4.5, imperativo:0.1 },
+              tiempo:{ pasado:9.7, presente:78.5, futuro:11.8 },
+              modalizadores_por_1000:2.01 },
+    siente: { valencia:0.42, intensidad_por_100:1.08,
+              plutchik:{ anticipacion:35.6, confianza:18.6, alegria:16.9, asco:11.9,
+                         miedo:8.5, ira:6.8, tristeza:1.7, sorpresa:0.0 },
+              direccion:{ pasado:25.7, futuro:30.6, adentro:38.9, afuera:4.9 },
+              agencia:{ activa:48.4, pasiva:51.6 },
+              campos:[ {campo:'orgullo_nacional',porcentaje:48.6},
+                       {campo:'esfuerzo_y_sacrificio',porcentaje:15.9},
+                       {campo:'esperanza_y_futuro',porcentaje:12.1} ] },
+    lex: { mtld:52.2, hapax_por_100:16.24, repeticion_top20:0.059, long_media:4.36 }
+  }
+};
+
+// Palette — industrial signal
+const PAL = ['#F7F7F4','#F7F7F4','#F7F7F4','#F7F7F4','#F7F7F4','#F7F7F4','#F7F7F4','#F7F7F4'];
+let pidx = 0;
+const nb  = () => PAL[pidx++ % PAL.length];
+const fmt = (v,d=1) => Number.isInteger(v) ? String(v) : (+v).toFixed(d);
+const ff  = 'font-family="Helvetica Neue,Arial,sans-serif"';
+
+// Convert hex color to rgba string
+function hr(hex, a) {
+  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+function infoBtn(name, unit, desc, detail) {
+  return `<div class="cc-info" onclick="this.closest('.cc').classList.toggle('open')">
+    <div class="cc-info-row">
+      <div>
+        <div class="cc-name">${name}</div>
+        ${unit ? `<div class="cc-vals">${unit}</div>` : ''}
+        <div class="cc-desc">${desc}</div>
+      </div>
+      <span class="cc-toggle">+</span>
+    </div>
+  </div>
+  <div class="cc-expand"><div class="cc-expand-inner">${detail}</div></div>`;
+}
+
+// ── Paired bars (colored bars on dark track) ──────────────────────────────────
+function pb(name, unit, cV, aV, dec=1, span='', desc='', detail='') {
+  const bg  = nb();
+  const max = Math.max(cV, aV) || 1;
+  const cp  = (cV/max*100).toFixed(1), ap = (aV/max*100).toFixed(1);
+  return `<div class="cc ${span}" style="--cb:${bg}">
+    <div class="cc-chart">
+      <div class="bch">
+        <div class="br"><span class="ct">C</span><div class="btr"><div class="bfc" style="width:${cp}%"></div></div><span class="bv">${fmt(cV,dec)}</span></div>
+        <div class="br"><span class="ct">A</span><div class="btr"><div class="bfa" style="width:${ap}%"></div></div><span class="bv">${fmt(aV,dec)}</span></div>
+      </div>
+    </div>
+    ${infoBtn(name, unit, desc, detail)}
+  </div>`;
+}
+
+// ── Stacked bars (color opacities on dark) ────────────────────────────────────
+function sb(name, unit, cObj, aObj, labels, span='', desc='', detail='') {
+  const bg      = nb();
+  const keys    = Object.keys(cObj);
+  const cTot    = Object.values(cObj).reduce((a,b)=>a+b,0)||1;
+  const aTot    = Object.values(aObj).reduce((a,b)=>a+b,0)||1;
+  const cAlpha  = [1, 0.62, 0.36, 0.16];
+  const aDots   = [[1.5,4],[1.3,5.5],[1.1,7],[0.9,10]];
+
+  const cBars = keys.map((k,i)=>{
+    const w=(cObj[k]/cTot*100).toFixed(1);
+    return `<div class="sg" style="width:${w}%;background:${hr(bg,cAlpha[i])}"></div>`;
+  }).join('');
+
+  const aBars = keys.map((k,i)=>{
+    const w=(aObj[k]/aTot*100).toFixed(1);
+    const [r,s]=aDots[i];
+    return `<div class="sg" style="width:${w}%;background-image:radial-gradient(circle,${hr(bg,0.85)} ${r}px,transparent ${r}px);background-size:${s}px ${s}px"></div>`;
+  }).join('');
+
+  const leg = labels.map((l,i)=>
+    `<span class="stk-leg"><span class="stk-sw" style="background:${hr(bg,cAlpha[i])}"></span>${l}</span>`
+  ).join('');
+
+  return `<div class="cc ${span}" style="--cb:${bg}">
+    <div class="cc-chart">
+      <div class="str"><span class="ct">C</span><div class="strk">${cBars}</div></div>
+      <div class="str"><span class="ct">A</span><div class="strk">${aBars}</div></div>
+      <div class="stk-legend">${leg}</div>
+    </div>
+    ${infoBtn(name, unit, desc, detail)}
+  </div>`;
+}
+
+// ── Valencia line (colored on dark) ──────────────────────────────────────────
+function vc(cV, aV, desc='', detail='') {
+  const bg=nb(), x0=16, x1=194, y=34, h=78;
+  const xs=v=>(x0+(v+1)/2*(x1-x0)).toFixed(1);
+  const xC=xs(cV), xA=xs(aV);
+  const ra=(a)=>`rgba(247,247,244,${a})`;
+  let s=`<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="${ra(.14)}" stroke-width="0.8"/>`;
+  [-1,-0.5,0,0.5,1].forEach(v=>{
+    const x=xs(v);
+    s+=`<line x1="${x}" y1="${y-5}" x2="${x}" y2="${y+5}" stroke="${ra(.12)}" stroke-width="0.5"/>`;
+    s+=`<text x="${x}" y="${y+17}" font-size="8" text-anchor="middle" fill="${ra(.28)}" ${ff}>${v}</text>`;
+  });
+  s+=`<text x="${xC}" y="${y-12}" font-size="9.5" text-anchor="middle" style="fill:var(--cb)" ${ff}>${cV}</text>`;
+  s+=`<text x="${xA}" y="${y-12}" font-size="9.5" text-anchor="middle" style="fill:var(--cb)" ${ff}>${aV}</text>`;
+  s+=`<circle cx="${xC}" cy="${y}" r="6" style="fill:var(--cb)"/>`;
+  s+=`<circle cx="${xA}" cy="${y}" r="6" fill="none" style="stroke:var(--cb)" stroke-width="1.8" stroke-dasharray="2.5 2"/>`;
+  s+=`<text x="${xC}" y="${y+30}" font-size="7.5" text-anchor="middle" fill="${ra(.28)}" ${ff}>C</text>`;
+  s+=`<text x="${xA}" y="${y+30}" font-size="7.5" text-anchor="middle" fill="${ra(.28)}" ${ff}>A</text>`;
+  return `<div class="cc" style="--cb:${bg}">
+    <div class="cc-chart"><svg viewBox="0 0 210 ${h}" class="ch-svg">${s}</svg></div>
+    ${infoBtn('Valencia afectiva', `C · ${cV} &nbsp;&nbsp; A · ${aV}`, desc, detail)}
+  </div>`;
+}
+
+// ── Plutchik radars (colored polygons on dark) ────────────────────────────────
+function radar(cEmo, aEmo, desc='', detail='') {
+  const bg=nb();
+  const EMOS=['confianza','anticipacion','tristeza','ira','miedo','alegria','asco','sorpresa'];
+  const N=8, R=50, MAXP=35;
+
+  const poly=(data,cx,cy,solid)=>{
+    const pts=EMOS.map((em,i)=>{
+      const a=(i/N)*Math.PI*2-Math.PI/2;
+      const r=Math.min((data[em]||0)/MAXP,1.1)*R;
+      return [cx+r*Math.cos(a), cy+r*Math.sin(a)];
+    });
+    const d=pts.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join('')+'Z';
+    return solid
+      ? `<path d="${d}" style="fill:var(--cb);fill-opacity:.15;stroke:var(--cb)" stroke-width="1.4"/>`
+      : `<path d="${d}" fill="none" style="stroke:var(--cb)" stroke-opacity=".65" stroke-width="1.2" stroke-dasharray="3 2"/>`;
+  };
+
+  const axes=(cx,cy)=>{
+    let s='';
+    [.33,.66,1].forEach(fr=>{
+      const pts=EMOS.map((_,i)=>{const a=(i/N)*Math.PI*2-Math.PI/2;return[cx+R*fr*Math.cos(a),cy+R*fr*Math.sin(a)];});
+      const d=pts.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join('')+'Z';
+      s+=`<path d="${d}" fill="none" stroke="rgba(247,247,244,.08)" stroke-width="0.5"/>`;
+    });
+    EMOS.forEach((em,i)=>{
+      const a=(i/N)*Math.PI*2-Math.PI/2;
+      s+=`<line x1="${cx}" y1="${cy}" x2="${(cx+R*Math.cos(a)).toFixed(1)}" y2="${(cy+R*Math.sin(a)).toFixed(1)}" stroke="rgba(247,247,244,.10)" stroke-width="0.5"/>`;
+      const lx=(cx+(R+13)*Math.cos(a)).toFixed(1), ly=(cy+(R+13)*Math.sin(a)).toFixed(1);
+      s+=`<text x="${lx}" y="${ly}" font-size="7" fill="rgba(247,247,244,.32)" text-anchor="middle" dominant-baseline="middle" ${ff}>${em.slice(0,4)}</text>`;
+    });
+    return s;
+  };
+
+  const sw=170, sh=160, cx=85, cy=78;
+  const mkR=(data,solid)=>`<svg viewBox="0 0 ${sw} ${sh}" class="ch-svg">${axes(cx,cy)}${poly(data,cx,cy,solid)}</svg>`;
+
+  return `<div class="cc span2" style="--cb:${bg}">
+    <div class="cc-chart">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:7.5px;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:4px">Cepeda</div>
+          ${mkR(cEmo,true)}
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:7.5px;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:4px">Abelardo</div>
+          ${mkR(aEmo,false)}
+        </div>
+      </div>
+    </div>
+    ${infoBtn('Emoción Plutchik', '% del total afectivo', desc, detail)}
+  </div>`;
+}
+
+// ── Campos semánticos ─────────────────────────────────────────────────────────
+function campos(cF, aF, desc='', detail='') {
+  const bg=nb();
+  const maxP=Math.max(...cF.map(f=>f.porcentaje),...aF.map(f=>f.porcentaje));
+  const row=(f,solid)=>{
+    const w=(f.porcentaje/maxP*100).toFixed(1);
+    const bar=solid
+      ?`<div class="campo-bc" style="width:${w}%"></div>`
+      :`<div class="campo-ba" style="width:${w}%"></div>`;
+    return `<div class="campo-item">
+      <div class="campo-bw">${bar}</div>
+      <span class="campo-lbl">${f.campo.replace(/_/g,' ')}</span>
+      <span class="campo-pct">${f.porcentaje}%</span>
+    </div>`;
+  };
+  return `<div class="cc span2" style="--cb:${bg}">
+    <div class="cc-chart">
+      <div class="campos-grid">
+        <div class="campos-col"><div class="campos-name">Cepeda</div>${cF.map(f=>row(f,true)).join('')}</div>
+        <div class="campos-col"><div class="campos-name">Abelardo</div>${aF.map(f=>row(f,false)).join('')}</div>
+      </div>
+    </div>
+    ${infoBtn('Campo semántico · top 3', '% del total de palabras', desc, detail)}
+  </div>`;
+}
+
+// ── Riqueza léxica — números grandes ─────────────────────────────────────────
+function lexCards(cL, aL) {
+  const metrics = [
+    { name:'MTLD',
+      desc:'Mide hasta qué punto el vocabulario se mantiene variado a lo largo del texto. Un valor alto indica que el hablante usa palabras nuevas durante mucho más tiempo antes de repetirse.',
+      cV:cL.mtld, aV:aL.mtld, dec:1 },
+    { name:'Hapax / 100 palabras',
+      desc:'Proporción de palabras que aparecen una sola vez en todo el texto. Alta proporción indica un vocabulario más rico y menos dependiente de términos repetidos.',
+      cV:cL.hapax_por_100, aV:aL.hapax_por_100, dec:1 },
+    { name:'Repetición top 20',
+      desc:'Fracción del texto total ocupada por las 20 palabras más frecuentes. Valor bajo = vocabulario más distribuido. Valor alto = el discurso orbita alrededor de pocos términos clave.',
+      cV:cL.repeticion_top20, aV:aL.repeticion_top20, dec:2 },
+    { name:'Longitud media de palabra',
+      desc:'Promedio de caracteres por palabra. Palabras más largas suelen indicar vocabulario más técnico, abstracto o formal.',
+      cV:cL.long_media, aV:aL.long_media, dec:1 },
+  ];
+  return `<div class="lex-cards">${metrics.map(m=>`
+    <div class="lex-card">
+      <div class="lex-nums">
+        <div class="lex-num">
+          <span class="lex-big lex-count" data-target="${m.cV}" data-dec="${m.dec}" style="color:rgba(247,247,244,0.88)">0</span>
+          <span class="lex-who">Cepeda</span>
+        </div>
+        <div class="lex-num">
+          <span class="lex-big lex-count" data-target="${m.aV}" data-dec="${m.dec}" style="color:rgba(247,247,244,0.55)">0</span>
+          <span class="lex-who">Abelardo</span>
+        </div>
+      </div>
+      <div class="lex-label">${m.name}</div>
+      <div class="lex-detail">${m.desc}</div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function animateLexCounters() {
+  const DURATION = 1400;
+  const ease = t => 1 - Math.pow(1 - t, 3); // ease-out cubic
+
+  const els = document.querySelectorAll('.lex-count');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      if (el.dataset.animated) return;
+      el.dataset.animated = '1';
+      obs.unobserve(el);
+
+      const target = parseFloat(el.dataset.target);
+      const dec    = parseInt(el.dataset.dec);
+      const start  = performance.now();
+
+      function tick(now) {
+        const t = Math.min((now - start) / DURATION, 1);
+        el.textContent = (target * ease(t)).toFixed(dec);
+        if (t < 1) requestAnimationFrame(tick);
+        else el.textContent = fmt(target, dec);
+      }
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.3 });
+
+  els.forEach(el => obs.observe(el));
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+const C = JD.c, A = JD.a;
+
+document.getElementById('grid-think').innerHTML = [
+  pb('Condicionales',         'por 1 000 palabras', C.piensa.condicionales_por_1000,      A.piensa.condicionales_por_1000,      1, '', 'Frecuencia de estructuras condicionales.', 'Las condicionales son oraciones del tipo «si ocurre X, entonces Y». Miden la capacidad del hablante de formular escenarios hipotéticos y razonar sobre consecuencias. Un valor alto indica un discurso más analítico, que considera causas y efectos antes de llegar a conclusiones.'),
+  pb('Contrafactuales',       'por 1 000 palabras', C.piensa.contrafactuales_por_1000,    A.piensa.contrafactuales_por_1000,    1, '', 'Oraciones tipo «si hubiera...». Revelan pensamiento alternativo.', 'Los contrafactuales son condicionales anclados en el pasado: «si esto no hubiera ocurrido, hoy tendríamos…». Revelan la capacidad de revisar críticamente la historia, imaginar alternativas y argumentar sobre responsabilidades. Son marcadores de pensamiento reflexivo complejo y poco frecuentes en el discurso populista directo.'),
+  pb('Subordinadas',          'por 1 000 palabras', C.piensa.subordinadas_por_1000,       A.piensa.subordinadas_por_1000,       1, '', 'Oraciones anidadas. Indica complejidad sintáctica.', 'Las oraciones subordinadas son cláusulas que dependen gramaticalmente de una principal. Cuantas más hay, más información el hablante empaqueta dentro de una misma unidad sintáctica. Es un indicador clásico de complejidad gramatical: más subordinadas = más capas de sentido por oración.'),
+  pb('Subordinadas / oración','',                   C.piensa.subordinadas_por_oracion,    A.piensa.subordinadas_por_oracion,    1, '', 'Densidad de cláusulas por oración.', 'Mide cuántas cláusulas subordinadas contiene cada oración en promedio. Mientras la variable anterior cuenta el total de subordinadas en el texto, esta captura qué tan densa es la arquitectura interna de cada oración individual. Valores altos indican un estilo que acumula muchos matices dentro de cada frase.'),
+  pb('Mediana de oración',    'palabras',           C.piensa.mediana_palabras_oracion,    A.piensa.mediana_palabras_oracion,    0, '', 'Longitud típica de cada oración.', 'La mediana de palabras por oración indica la extensión típica de cada unidad de sentido. A diferencia del promedio, la mediana es resistente a valores extremos. Oraciones largas permiten desarrollar ideas con muchos matices; oraciones cortas generan inmediatez e impacto. La diferencia entre candidatos aquí es casi el doble.'),
+  pb('Oraciones largas',      '%',                  C.piensa.porcentaje_oraciones_largas, A.piensa.porcentaje_oraciones_largas, 0, '', 'Proporción de oraciones de más de 30 palabras.', 'Complementa la mediana: no solo cuál es la longitud típica sino cuántas oraciones superan un umbral de complejidad. Una oración de más de 30 palabras requiere que el oyente mantenga en memoria muchos elementos simultáneos antes de cerrar el sentido. Alta proporción = discurso más exigente cognitivamente.'),
+  pb('Conectores lógicos',    'por 100 palabras',   C.piensa.conectores_logicos_por_100,  A.piensa.conectores_logicos_por_100,  1, '', 'Articuladores explícitos del razonamiento.', 'Palabras y frases que marcan explícitamente la relación entre ideas: «sin embargo», «por lo tanto», «aunque», «dado que», «en consecuencia», «a pesar de». Su uso revela que el hablante construye argumentos encadenados y guía al oyente a través del razonamiento en lugar de simplemente yuxtaponer afirmaciones.'),
+].join('');
+
+document.getElementById('grid-speak').innerHTML = [
+  pb('Nominalizaciones',          'por 100 palabras',   C.habla.nominalizaciones_por_100,  A.habla.nominalizaciones_por_100,  1, '', 'Verbos convertidos en sustantivos. Habla abstracta.', 'La nominalización convierte verbos o adjetivos en sustantivos: «gobernar» → «la gobernanza», «corrupto» → «la corrupción». Hace el discurso más abstracto, técnico y distante de la acción concreta. Son frecuentes en el lenguaje burocrático y político formal, y pueden funcionar como escudo retórico al diluir la agencia de los hechos.'),
+  sb('Pronombres',                'por 1 000 palabras', C.habla.pronombres, A.habla.pronombres, ['yo','nosotros','ustedes','ellos'], '', 'Quién nombra como sujeto del discurso.', 'Los pronombres personales revelan desde dónde habla el candidato. «Yo» señala individualismo y responsabilidad personal. «Nosotros» construye comunidad e identidad colectiva. «Ustedes» apela directamente al auditorio. «Ellos» señala a un grupo externo, frecuentemente como adversario o causa del problema. La distribución revela la arquitectura social del discurso.'),
+  sb('Modo verbal',               '% del total verbal', C.habla.modo, A.habla.modo, ['indicativo','subjuntivo','condicional','imperativo'], '', 'La actitud del hablante frente a lo que afirma.', 'El modo verbal expresa la relación del hablante con la verdad de lo que dice. El indicativo afirma hechos («el país está en crisis»). El subjuntivo expresa posibilidad, duda o deseo («ojalá que mejore»). El condicional formula hipótesis («si ganamos, haríamos»). El imperativo da órdenes o llama a la acción («¡voten!, ¡luchen!»). La distribución define si el discurso certifica, pondera o manda.'),
+  sb('Tiempo verbal',             '% del total verbal', C.habla.tiempo, A.habla.tiempo, ['pasado','presente','futuro'], '', 'Dónde se ancla temporalmente el relato.', 'El anclaje temporal del discurso revela cómo el candidato construye su narrativa. Predominio del pasado: relato histórico, victimización o rendición de cuentas. Predominio del presente: urgencia, inmediatez, los hechos como son ahora. Predominio del futuro: promesa, visión, proyecto. La mezcla informa sobre la estructura del argumento político central.'),
+  pb('Modalizadores epistémicos', 'por 1 000 palabras', C.habla.modalizadores_por_1000, A.habla.modalizadores_por_1000, 1, '', 'Expresiones que gradúan la certeza del hablante.', 'Los modalizadores epistémicos son palabras y frases que indican cuánta certeza tiene el hablante sobre lo que afirma: «creo que», «es evidente que», «quizás», «sin duda», «probablemente», «es posible que». Un uso alto indica un discurso que matiza sus afirmaciones y reconoce la incertidumbre. Un uso bajo puede indicar un estilo más dogmático o categórico.'),
+].join('');
+
+document.getElementById('grid-feel').innerHTML = [
+  vc(C.siente.valencia, A.siente.valencia, 'Tono emocional global de −1 (negativo) a +1 (positivo).', 'La valencia afectiva mide el tono emocional global del discurso en una escala continua de −1 (muy negativo) a +1 (muy positivo). Se calcula a partir de la carga semántica acumulada de todas las palabras del texto. Un valor negativo no significa pesimismo: significa que el discurso nombra más problemas, amenazas o conflictos que logros o esperanzas. Ambos candidatos están en negativo, pero Abelardo duplica la negatividad de Cepeda.'),
+  pb('Intensidad afectiva', 'por 100 palabras', C.siente.intensidad_por_100, A.siente.intensidad_por_100, 1, '', 'Densidad de palabras con carga emocional.', 'Mide cuántas palabras con carga emocional explícita contiene el texto por cada cien palabras, independientemente de si las emociones son positivas o negativas. Es una medida de saturación afectiva del discurso. Alta intensidad puede generar mayor impacto y movilización, pero también mayor fatiga emocional en el oyente. Abelardo casi duplica a Cepeda en esta variable.'),
+  radar(C.siente.plutchik, A.siente.plutchik, 'Distribución emocional según la rueda de Plutchik.', 'La rueda de Robert Plutchik identifica ocho emociones primarias, cada una con una función adaptativa: confianza (construye vínculos), anticipación (orienta hacia el futuro), alegría (refuerza), sorpresa (alerta), miedo (protege), tristeza (elabora pérdidas), asco (rechaza), ira (defiende límites). La distribución revela el perfil emocional dominante y qué respuestas adaptativas busca activar cada discurso.'),
+  sb('Dirección del afecto', '% del contenido emocional', C.siente.direccion, A.siente.direccion, ['pasado','futuro','adentro','afuera'], '', '¿Hacia dónde apunta el contenido emocional?', 'Clasifica el contenido emocional según su orientación. «Adentro» refiere a la propia comunidad, valores compartidos o identidad colectiva. «Afuera» señala al mundo externo, el adversario o la amenaza foránea. «Pasado» ancla las emociones en hechos históricos o agravios. «Futuro» las proyecta hacia promesas, advertencias o esperanzas. Esta distribución revela la arquitectura narrativa profunda del discurso.'),
+  pb('Agencia activa', '%', C.siente.agencia.activa, A.siente.agencia.activa, 0, '', 'El sujeto actúa, no padece.', 'Proporción de oraciones en las que el sujeto gramatical es también el agente de la acción (hace algo) versus oraciones pasivas o impersonales donde el sujeto padece o recibe la acción. Alta agencia activa indica un discurso de poder y decisión. Baja agencia puede señalar victimización, distancia respecto a los hechos o atribución de responsabilidades a fuerzas externas.'),
+  campos(C.siente.campos, A.siente.campos, 'Los tres universos conceptuales más frecuentes.', 'Los campos semánticos identifican los universos conceptuales que organizan el pensamiento del candidato: qué metáforas y marcos mentales usa para hablar de la realidad política. Se detectan por clustering semántico de términos: palabras que co-ocurren frecuentemente y comparten campo de significado. El campo dominante es el que más palabras agrupa y más veces aparece en el texto total.'),
+].join('');
+
+document.getElementById('grid-lex').innerHTML = lexCards(C.lex, A.lex);
+animateLexCounters();
+</script>
+
+<script>
+(function(){
+  const el = document.getElementById('site-sub-tw');
+  if (!el) return;
+  const fullHTML = el.innerHTML.trim();
+  const A = 'Analizamos sus discursos, cómo organizan sus ideas y qué palabras escogen, para entender ';
+  const B = 'no lo que dicen, sino cómo lo piensan.';
+  const full = A + B;
+
+  el.innerHTML = '<span class="tw-cursor"></span>';
+
+  let i = 0;
+  function tick() {
+    const typed = full.slice(0, i);
+    const past  = i > A.length;
+    const norm  = past ? A : typed;
+    const bold  = past ? typed.slice(A.length) : '';
+    el.innerHTML = norm + (bold ? `<strong>${bold}</strong>` : '') + '<span class="tw-cursor"></span>';
+    if (i < full.length) {
+      i++;
+      setTimeout(tick, i < 3 ? 180 : 24);
+    } else {
+      setTimeout(() => { el.innerHTML = fullHTML; }, 1400);
+    }
+  }
+  setTimeout(tick, 700);
+})();
+</script>
+</body>
+</html>
